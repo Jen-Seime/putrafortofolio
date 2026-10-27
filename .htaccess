@@ -1,0 +1,54 @@
+# ====================================================================
+# Konfigurasi Apache .htaccess untuk InfinityFree Hosting
+# Dioptimalkan untuk Website Statis (HTML, CSS, JS, Gambar)
+# ====================================================================
+
+# 1. Pastikan Charset Default adalah UTF-8
+AddDefaultCharset UTF-8
+AddCharset UTF-8 .html .css .js .xml .json
+
+# 2. Aktifkan Kompresi GZIP (Mempercepat loading website)
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html
+  AddOutputFilterByType DEFLATE text/css
+  AddOutputFilterByType DEFLATE text/javascript
+  AddOutputFilterByType DEFLATE application/javascript
+  AddOutputFilterByType DEFLATE application/x-javascript
+  AddOutputFilterByType DEFLATE application/json
+  AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# 3. Cache Browser untuk Asset Statis (CSS, JS, Gambar)
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault "access plus 1 month"
+
+  # HTML file - diperbarui tiap 1 jam agar update cepat muncul
+  ExpiresByType text/html "access plus 1 hour"
+
+  # CSS dan JavaScript - 1 minggu
+  ExpiresByType text/css "access plus 1 week"
+  ExpiresByType application/javascript "access plus 1 week"
+  ExpiresByType text/javascript "access plus 1 week"
+
+  # Gambar dan Favicon - 1 bulan
+  ExpiresByType image/jpeg "access plus 1 month"
+  ExpiresByType image/png "access plus 1 month"
+  ExpiresByType image/webp "access plus 1 month"
+  ExpiresByType image/svg+xml "access plus 1 month"
+  ExpiresByType image/x-icon "access plus 1 month"
+</IfModule>
+
+# 4. Keamanan Dasar
+<IfModule mod_headers.c>
+  # Cegah clickjacking (Website tidak bisa dimasukkan iframe asing)
+  Header set X-Frame-Options "SAMEORIGIN"
+  # Mencegah MIME-type sniffing
+  Header set X-Content-Type-Options "nosniff"
+</IfModule>
+
+# 5. Nonaktifkan Directory Listing (Mencegah pengunjung melihat isi folder)
+Options -Indexes
+
+# 6. Halaman Utama Default
+DirectoryIndex index.html index.php
